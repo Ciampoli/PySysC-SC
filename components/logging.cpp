@@ -6,12 +6,12 @@
  */
 
 
-#include "logging.h"
 #include <systemc>
 #include <deque>
 #include <array>
 #include <sstream>
 #include <iomanip>
+#include "logging_.h"
 
 using namespace sc_core;
 

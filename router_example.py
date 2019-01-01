@@ -8,12 +8,17 @@ import pysysc as scpy
 myDir = os.path.dirname( os.path.realpath(__file__))
 conan_err = scpy.read_config_from_conan(os.path.join(myDir, 'conanfile.txt'))
 scpy.load_systemc()
+print("Loading SC-Components lib")
+scpy.add_include_path(os.path.join(myDir, 'sc-components/incl'))
+scpy.add_library('scc.h', os.path.join(myDir, 'build/Debug/lib/libsc-components.so'))
+print("Loading Components lib")
 scpy.add_include_path(os.path.join(myDir, 'components'))
 scpy.add_library('components.h', os.path.join(myDir, 'build/Debug/lib/libcomponents.so'))
 ###############################################################################
 # configure
 ###############################################################################
-cpp.init_logging(5)
+#cpp.IoRedirector.get().start()
+cpp.scc.init_logging(cpp.logging.INFO, False);
 cpp.sc_core.sc_report_handler.set_actions(cpp.sc_core.SC_ID_MORE_THAN_ONE_SIGNAL_DRIVER_, cpp.sc_core.SC_DO_NOTHING);
 ###############################################################################
 # instantiate

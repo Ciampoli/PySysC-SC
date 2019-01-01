@@ -6,7 +6,8 @@
  */
 
 #include "initiator.h"
-#include "logging.h"
+
+#include <scc/report.h>
 
 
 Initiator::Initiator(::sc_core::sc_module_name nm)
@@ -51,7 +52,7 @@ void Initiator::thread_process() {
                     wait( dmi_data.get_write_latency() );
                 }
 
-                LOG_INFO << "DMI   = { " << (cmd ? 'W' : 'R') << ", " << hex << i
+                SCINFO() << "DMI   = { " << (cmd ? 'W' : 'R') << ", " << hex << i
                         << " } , data = " << hex << data << " at time " << sc_time_stamp();
             }
             else
@@ -97,7 +98,7 @@ void Initiator::thread_process() {
                     dmi_ptr_valid = socket->get_direct_mem_ptr( *trans, dmi_data );
                 }
 
-                LOG_INFO << "trans = { " << (cmd ? 'W' : 'R') << ", " << hex << i
+                SCINFO() << "trans = { " << (cmd ? 'W' : 'R') << ", " << hex << i
                         << " } , data = " << hex << data << " at time " << sc_time_stamp();
             }
         }
@@ -115,7 +116,7 @@ void Initiator::thread_process() {
 
         for (unsigned int i = 0; i < n_bytes; i += 4)
         {
-            LOG_INFO << "mem[" << (A + i) << "] = "
+            SCINFO() << "mem[" << (A + i) << "] = "
                     << *(reinterpret_cast<unsigned int*>( &data[i] ));
         }
 
@@ -127,7 +128,7 @@ void Initiator::thread_process() {
 
         for (unsigned int i = 0; i < n_bytes; i += 4)
         {
-            LOG_INFO << "mem[" << (A + i) << "] = "
+            SCINFO() << "mem[" << (A + i) << "] = "
                     << *(reinterpret_cast<unsigned int*>( &data[i] ));
         }
     }

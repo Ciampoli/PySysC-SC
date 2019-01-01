@@ -1,0 +1,3 @@
+[submodule "sc-components"]
+	path = sc-components
+	url = https://git.minres.com/SystemC/SystemC-Components.git

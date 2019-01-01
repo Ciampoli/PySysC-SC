@@ -9,8 +9,7 @@
 #define COMPONENTS_H_
 
 //#include "tx_example_mods.h"
-#include <systemc.h>
-#include "logging.h"
+//#include "logging.h"
 #include "initiator.h"
 #include "router.h"
 #include "target.h"
