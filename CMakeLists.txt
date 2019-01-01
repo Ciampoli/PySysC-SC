@@ -72,6 +72,7 @@ include(sc-components/cmake/clang-format.cmake)
 
 add_subdirectory(sc-components)
 add_subdirectory(components)
+add_subdirectory(top)
 
 # CTest is a testing tool that can be used to test your project.
 # enable_testing()
