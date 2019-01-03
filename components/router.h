@@ -27,9 +27,14 @@ struct Router: sc_module
 
   sc_core::sc_vector<tlm_utils::simple_initiator_socket_tagged<Router>> initiator_socket;
 
+  sc_core::sc_in<sc_core::sc_time> clk_i;
+  sc_core::sc_in<sc_dt::sc_logic>  reset_i;
+
   SC_CTOR(Router)
   : target_socket("target_socket")
   , initiator_socket("socket", N_TARGETS)
+  , clk_i("clk_i")
+  , reset_i("reset_i")
   {
     // Register callbacks for incoming interface method calls
     target_socket.register_b_transport(       this, &Router::b_transport);

@@ -66,7 +66,10 @@ bool Memory::get_direct_mem_ptr(tlm::tlm_generic_payload& trans,
 }
 
 Memory::Memory(sc_core::sc_module_name nm)
-: socket("socket"), LATENCY(10, SC_NS)
+: socket("socket")
+, clk_i("clk_i")
+, reset_i("reset_i")
+, LATENCY(10, SC_NS)
 {
   // Register callbacks for incoming interface method calls
   socket.register_b_transport(       this, &Memory::b_transport);

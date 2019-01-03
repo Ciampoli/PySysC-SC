@@ -2,6 +2,8 @@ set(LIB_SOURCES
 	initiator.cpp
 	logging.cpp
 	target.cpp
+	clkgen.cpp
+	resetgen.cpp
 )
 
 # Define two variables in order not to repeat ourselves.

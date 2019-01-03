@@ -19,6 +19,9 @@ struct Memory: sc_module
 {
   // TLM-2 socket, defaults to 32-bits wide, base protocol
   tlm_utils::simple_target_socket<Memory> socket;
+  sc_core::sc_in<sc_core::sc_time> clk_i;
+  sc_core::sc_in<sc_dt::sc_logic>  reset_i;
+
 
   enum { SIZE = 256 };
   const sc_time LATENCY;

@@ -12,6 +12,8 @@
 
 Initiator::Initiator(::sc_core::sc_module_name nm)
 : socket("socket")  // Construct and name socket
+, clk_i("clk_i")
+, reset_i("reset_i")
 , dmi_ptr_valid(false)
 {
     // Register callbacks for incoming interface method calls
@@ -21,6 +23,7 @@ Initiator::Initiator(::sc_core::sc_module_name nm)
 }
 
 void Initiator::thread_process() {
+    wait(reset_i.negedge_event());
     {
         // TLM-2 generic payload transaction, reused across calls to b_transport, DMI and debug
         tlm::tlm_generic_payload* trans = new tlm::tlm_generic_payload;

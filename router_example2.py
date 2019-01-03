@@ -2,6 +2,7 @@ import os.path
 import logging
 from cppyy import gbl as cpp
 import pysysc
+from pysysc.structural import Connection, Module, Signal
 ###############################################################################
 # setup  and load
 ###############################################################################
@@ -23,30 +24,22 @@ cpp.sc_core.sc_report_handler.set_actions(cpp.sc_core.SC_ID_MORE_THAN_ONE_SIGNAL
 ###############################################################################
 # instantiate
 ###############################################################################
-clkgen = cpp.ClkGen(cpp.sc_core.sc_module_name("clk_gen"))
-rstgen = cpp.ResetGen(cpp.sc_core.sc_module_name("rst_gen"))
-initiator = cpp.Initiator(cpp.sc_core.sc_module_name("initiator"))
-memories = [cpp.Memory(cpp.sc_core.sc_module_name(name)) for name in ["mem0", "mem1", "mem2", "mem3"]]
-router = cpp.Router[4](cpp.sc_core.sc_module_name("router"))
-###############################################################################
-# signals
-##################‚‚‚sS#############################################################
-sig_clk = cpp.sc_core.sc_signal[cpp.sc_core.sc_time]("clk")
-sig_rst = cpp.sc_core.sc_signal[cpp.sc_dt.sc_logic]("rst")
+clk_gen = Module(cpp.ClkGen).create("clk_gen")
+rst_gen = Module(cpp.ResetGen).create("rst_gen")
+initiator = Module(cpp.Initiator).create("initiator")
+memories = [Module(cpp.Memory).create(name) for name in ["mem0", "mem1", "mem2", "mem3"]]
+router = Module(cpp.Router[4]).create("router")
 ###############################################################################
 # connect it
 ###############################################################################
-clkgen.clk_o(sig_clk)
-rstgen.reset_o(sig_rst)
-initiator.socket.bind(router.target_socket)
-initiator.clk_i(sig_clk)
-initiator.reset_i(sig_rst)
-router.clk_i(sig_clk)
-router.reset_i(sig_rst)
+clk = Signal("clk").src(clk_gen.clk_o).sink(initiator.clk_i).sink(router.clk_i)
+[clk.sink(m.clk_i) for m in memories]
+rst = Signal("rst").src(rst_gen.reset_o).sink(initiator.reset_i).sink(router.reset_i)
+[rst.sink(m.reset_i) for m in memories]
+Connection().src(initiator.socket).sink(router.target_socket)
 for idx,m in enumerate(memories):
-    router.initiator_socket.at(idx).bind(m.socket)
-    m.clk_i(sig_clk)
-    m.reset_i(sig_rst)
+    Connection().src(router.initiator_socket.at(idx)).sink(m.socket)
+    
 ###############################################################################
 # run if it is standalone
 ###############################################################################
