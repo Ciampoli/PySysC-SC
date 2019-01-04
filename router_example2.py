@@ -2,25 +2,29 @@ import os.path
 import logging
 from cppyy import gbl as cpp
 import pysysc
-from pysysc.structural import Connection, Module, Signal
+from pysysc.structural import Connection, Module, Signal, Simulation
+
 ###############################################################################
 # setup  and load
 ###############################################################################
+logging.basicConfig(level=logging.INFO)
+build_type='Debug'
+###############################################################################
 myDir = os.path.dirname( os.path.realpath(__file__))
-conan_err = pysysc.read_config_from_conan(os.path.join(myDir, 'conanfile.txt'))
+pysysc.read_config_from_conan(os.path.join(myDir, 'conanfile.txt'), build_type)
 pysysc.load_systemc()
+###############################################################################
 logging.debug("Loading SC-Components lib")
 pysysc.add_include_path(os.path.join(myDir, 'sc-components/incl'))
-pysysc.add_library('scc.h', os.path.join(myDir, 'build/Debug/lib/libsc-components.so'))
+pysysc.add_library('scc.h', os.path.join(myDir, 'build/%s/lib/libsc-components.so'%build_type))
+###############################################################################
 logging.debug("Loading Components lib")
 pysysc.add_include_path(os.path.join(myDir, 'components'))
-pysysc.add_library('components.h', os.path.join(myDir, 'build/Debug/lib/libcomponents.so'))
+pysysc.add_library('components.h', os.path.join(myDir, 'build/%s/lib/libcomponents.so'%build_type))
 ###############################################################################
 # configure
 ###############################################################################
-cpp.scc.init_logging(cpp.logging.INFO, False);
-#cpp.scc.init_logging(cpp.logging.WARNING, False);
-cpp.sc_core.sc_report_handler.set_actions(cpp.sc_core.SC_ID_MORE_THAN_ONE_SIGNAL_DRIVER_, cpp.sc_core.SC_DO_NOTHING);
+Simulation.setup(logging.root.level)
 ###############################################################################
 # instantiate
 ###############################################################################
@@ -37,13 +41,10 @@ clk = Signal("clk").src(clk_gen.clk_o).sink(initiator.clk_i).sink(router.clk_i)
 rst = Signal("rst").src(rst_gen.reset_o).sink(initiator.reset_i).sink(router.reset_i)
 [rst.sink(m.reset_i) for m in memories]
 Connection().src(initiator.socket).sink(router.target_socket)
-for idx,m in enumerate(memories):
-    Connection().src(router.initiator_socket.at(idx)).sink(m.socket)
-    
+[Connection().src(router.initiator_socket.at(idx)).sink(m.socket) for idx,m in enumerate(memories)]    
 ###############################################################################
 # run if it is standalone
 ###############################################################################
 if __name__ == "__main__":
-    cpp.sc_core.sc_in_action=True
-    cpp.sc_core.sc_start()
+    Simulation.run()
     logging.debug("Done")

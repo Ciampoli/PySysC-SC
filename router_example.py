@@ -5,20 +5,24 @@ import pysysc
 ###############################################################################
 # setup  and load
 ###############################################################################
+build_type='Debug'
+logging.basicConfig(level=logging.DEBUG)
+###############################################################################
 myDir = os.path.dirname( os.path.realpath(__file__))
-conan_err = pysysc.read_config_from_conan(os.path.join(myDir, 'conanfile.txt'))
+res=pysysc.read_config_from_conan(os.path.join(myDir, 'conanfile.txt'), build_type)
 pysysc.load_systemc()
+###############################################################################
 logging.debug("Loading SC-Components lib")
 pysysc.add_include_path(os.path.join(myDir, 'sc-components/incl'))
-pysysc.add_library('scc.h', os.path.join(myDir, 'build/Debug/lib/libsc-components.so'))
+pysysc.add_library('scc.h', os.path.join(myDir, 'build/%s/lib/libsc-components.so'%build_type))
+###############################################################################
 logging.debug("Loading Components lib")
 pysysc.add_include_path(os.path.join(myDir, 'components'))
-pysysc.add_library('components.h', os.path.join(myDir, 'build/Debug/lib/libcomponents.so'))
+pysysc.add_library('components.h', os.path.join(myDir, 'build/%s/lib/libcomponents.so'%build_type))
 ###############################################################################
 # configure
 ###############################################################################
 cpp.scc.init_logging(cpp.logging.INFO, False);
-#cpp.scc.init_logging(cpp.logging.WARNING, False);
 cpp.sc_core.sc_report_handler.set_actions(cpp.sc_core.SC_ID_MORE_THAN_ONE_SIGNAL_DRIVER_, cpp.sc_core.SC_DO_NOTHING);
 ###############################################################################
 # instantiate
@@ -51,6 +55,5 @@ for idx,m in enumerate(memories):
 # run if it is standalone
 ###############################################################################
 if __name__ == "__main__":
-    cpp.sc_core.sc_in_action=True
     cpp.sc_core.sc_start()
     logging.debug("Done")
