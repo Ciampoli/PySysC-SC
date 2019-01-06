@@ -24,6 +24,7 @@ pysysc.add_library('components.h', os.path.join(myDir, 'build/%s/lib/libcomponen
 ###############################################################################
 cpp.scc.init_logging(cpp.logging.INFO, False);
 cpp.sc_core.sc_report_handler.set_actions(cpp.sc_core.SC_ID_MORE_THAN_ONE_SIGNAL_DRIVER_, cpp.sc_core.SC_DO_NOTHING);
+cpp.scc.init_cci("GlobalBroker")
 ###############################################################################
 # instantiate
 ###############################################################################
@@ -34,7 +35,7 @@ memories = [cpp.Memory(cpp.sc_core.sc_module_name(name)) for name in ["mem0", "m
 router = cpp.Router[4](cpp.sc_core.sc_module_name("router"))
 ###############################################################################
 # signals
-##################‚‚‚sS#############################################################
+###############################################################################
 sig_clk = cpp.sc_core.sc_signal[cpp.sc_core.sc_time]("clk")
 sig_rst = cpp.sc_core.sc_signal[cpp.sc_dt.sc_logic]("rst")
 ###############################################################################
@@ -55,5 +56,9 @@ for idx,m in enumerate(memories):
 # run if it is standalone
 ###############################################################################
 if __name__ == "__main__":
+    if os.path.isfile('router_example.json'):
+        cfg = cpp.scc.configurer(cpp.std.string('router_example.json'));
+    trace = cpp.scc.configurable_tracer("router_example", 1, True, True)
+    trace.add_control()
     cpp.sc_core.sc_start()
     logging.debug("Done")

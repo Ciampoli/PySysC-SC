@@ -18,6 +18,6 @@ ClkGen::~ClkGen() {
     // TODO Auto-generated destructor stub
 }
 
-void ClkGen::end_of_elabortation() {
+void ClkGen::end_of_elaboration() {
     clk_o.write(10_ns);
 }

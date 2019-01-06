@@ -17,7 +17,7 @@ public:
     ClkGen(const sc_core::sc_module_name&);
     virtual ~ClkGen();
 protected:
-    void end_of_elabortation();
+    void end_of_elaboration() override;
 };
 
 #endif /* COMPONENTS_CLKGEN_H_ */

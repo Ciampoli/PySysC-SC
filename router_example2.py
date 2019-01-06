@@ -46,5 +46,6 @@ Connection().src(initiator.socket).sink(router.target_socket)
 # run if it is standalone
 ###############################################################################
 if __name__ == "__main__":
+    Simulation.configure(enable_vcd=True)
     Simulation.run()
     logging.debug("Done")

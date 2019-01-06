@@ -8,7 +8,7 @@ using namespace std;
 
 #include "tlm.h"
 #include "tlm_utils/simple_initiator_socket.h"
-
+#include <scc/utilities.h>
 
 // Initiator module generating generic payload transactions
 
@@ -34,6 +34,10 @@ struct Initiator: sc_module
 
   bool dmi_ptr_valid;
   tlm::tlm_dmi dmi_data;
+
+  void trace(sc_core::sc_trace_file* trf) const override {
+      TRACE_VAR(trf, dmi_ptr_valid);
+  }
 };
 
 #endif

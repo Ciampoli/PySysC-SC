@@ -48,13 +48,12 @@ endif()
 setup_conan()
 
 # This line finds the boost lib and headers. 
-set(Boost_NO_BOOST_CMAKE ON) #  Don't do a find_package in config mode before searching for a regular boost install.
-find_package(Boost COMPONENTS program_options filesystem system thread REQUIRED)
+#set(Boost_NO_BOOST_CMAKE ON) #  Don't do a find_package in config mode before searching for a regular boost install.
+#find_package(Boost COMPONENTS program_options filesystem system thread REQUIRED)
 
 # set-up SystemC and SCV
 find_package(SystemC)
 if(SystemC_FOUND)
-    add_definitions(-DWITH_SYSTEMC)
     include_directories(${SystemC_INCLUDE_DIRS})
     link_directories(${SystemC_LIBRARY_DIRS})
 else()
