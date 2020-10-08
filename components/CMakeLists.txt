@@ -10,5 +10,5 @@ set(LIB_SOURCES
 set(LIBRARY_NAME components)
 # Define the library
 add_library(${LIBRARY_NAME} SHARED ${LIB_SOURCES})
-target_link_libraries (${LIBRARY_NAME} LINK_PUBLIC sc-components)
+target_link_libraries (${LIBRARY_NAME} LINK_PUBLIC scc)
 target_include_directories (components PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

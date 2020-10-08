@@ -2,6 +2,7 @@ import os.path
 import logging
 from cppyy import gbl as cpp
 import pysysc
+import pysysc.structural as struct
 from pysysc.structural import Connection, Module, Signal, Simulation
 
 ###############################################################################
@@ -16,7 +17,7 @@ pysysc.load_systemc()
 ###############################################################################
 logging.debug("Loading SC-Components lib")
 pysysc.add_include_path(os.path.join(myDir, 'sc-components/incl'))
-pysysc.add_library('scc.h', os.path.join(myDir, 'build/%s/lib/libsc-components.so'%build_type))
+pysysc.add_library('scc.h', os.path.join(myDir, 'build/%s/lib/libscc.so'%build_type))
 ###############################################################################
 logging.debug("Loading Components lib")
 pysysc.add_include_path(os.path.join(myDir, 'components'))
@@ -31,8 +32,8 @@ Simulation.setup(logging.root.level)
 clk_gen = Module(cpp.ClkGen).create("clk_gen")
 rst_gen = Module(cpp.ResetGen).create("rst_gen")
 initiator = Module(cpp.Initiator).create("initiator")
-memories = [Module(cpp.Memory).create(name) for name in ["mem0", "mem1", "mem2", "mem3"]]
-router = Module(cpp.Router[4]).create("router")
+memories = [Module(cpp.Memory).create("mem%d"%i) for i in range(2)]
+router = Module(cpp.Router[len(memories)]).create("router")
 ###############################################################################
 # connect it
 ###############################################################################
@@ -45,6 +46,9 @@ Connection().src(initiator.socket).sink(router.target_socket)
 ###############################################################################
 # run if it is standalone
 ###############################################################################
+struct.dump_structure()
+simcontext = cpp.sc_core.sc_get_curr_simcontext()
+objects = cpp.sc_core.sc_get_top_level_objects(simcontext)
 if __name__ == "__main__":
     Simulation.configure(enable_vcd=True)
     Simulation.run()

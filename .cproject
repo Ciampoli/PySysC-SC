@@ -16,7 +16,7 @@
 					<folderInfo id="cdt.managedbuild.toolchain.gnu.base.1318364290.1772265551" name="/" resourcePath="">
 						<toolChain id="cdt.managedbuild.toolchain.gnu.base.23298673" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.base">
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.GNU_ELF" id="cdt.managedbuild.target.gnu.platform.base.155199250" name="Debug Platform" osList="linux,hpux,aix,qnx" superClass="cdt.managedbuild.target.gnu.platform.base"/>
-							<builder buildPath="/PySC/build/Debug" id="de.marw.cdt.cmake.core.genscriptbuilder.254681974" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CMake Builder (portable)" parallelBuildOn="false" superClass="de.marw.cdt.cmake.core.genscriptbuilder"/>
+							<builder buildPath="/PySC/build/Debug" id="de.marw.cdt.cmake.core.genscriptbuilder.254681974" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CMake Builder" parallelBuildOn="false" superClass="de.marw.cdt.cmake.core.genscriptbuilder"/>
 							<tool id="cdt.managedbuild.tool.gnu.archiver.base.1512061726" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.base.2080867410" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base">
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1337388874" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
@@ -49,6 +49,9 @@
 					<defs/>
 					<undefs/>
 				</win32>
+				<defs>
+					<def name="BUILD_SHARED_LIBS" type="BOOL" val="ON"/>
+				</defs>
 			</storageModule>
 		</cconfiguration>
 		<cconfiguration id="cdt.managedbuild.toolchain.gnu.base.1318364290.125067248">
