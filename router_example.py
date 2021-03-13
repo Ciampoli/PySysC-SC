@@ -14,7 +14,7 @@ pysysc.load_systemc()
 ###############################################################################
 logging.debug("Loading SC-Components lib")
 pysysc.add_include_path(os.path.join(myDir, 'sc-components/incl'))
-pysysc.add_library('scc.h', os.path.join(myDir, 'build/%s/lib/libsc-components.so'%build_type))
+pysysc.add_library('scc.h', os.path.join(myDir, 'build/%s/lib/libscc.so'%build_type))
 ###############################################################################
 logging.debug("Loading Components lib")
 pysysc.add_include_path(os.path.join(myDir, 'components'))
@@ -22,7 +22,7 @@ pysysc.add_library('components.h', os.path.join(myDir, 'build/%s/lib/libcomponen
 ###############################################################################
 # configure
 ###############################################################################
-cpp.scc.init_logging(cpp.logging.INFO, False);
+cpp.scc.init_logging(cpp.scc.log.INFO, 24, False);
 cpp.sc_core.sc_report_handler.set_actions(cpp.sc_core.SC_ID_MORE_THAN_ONE_SIGNAL_DRIVER_, cpp.sc_core.SC_DO_NOTHING);
 cpp.scc.init_cci("GlobalBroker")
 ###############################################################################
@@ -58,7 +58,6 @@ for idx,m in enumerate(memories):
 if __name__ == "__main__":
     if os.path.isfile('router_example.json'):
         cfg = cpp.scc.configurer(cpp.std.string('router_example.json'));
-    trace = cpp.scc.configurable_tracer("router_example", 1, True, True)
-    trace.add_control()
+    tracer = cpp.scc.tracer('vcd_trace', 1, True)
     cpp.sc_core.sc_start()
     logging.debug("Done")

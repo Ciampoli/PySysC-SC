@@ -124,14 +124,14 @@ struct Router: sc_module
   // Simple fixed address decoding
   inline unsigned int decode_address( sc_dt::uint64 address, sc_dt::uint64& masked_address )
   {
-    unsigned int target_nr = static_cast<unsigned int>( (address >> 8) & 0x3 );
-    masked_address = address & 0xFF;
+    unsigned int target_nr = static_cast<unsigned int>( (address >> 10) % initiator_socket.size() );
+    masked_address = address & 0x3FF;
     return target_nr;
   }
 
   inline sc_dt::uint64 compose_address( unsigned int target_nr, sc_dt::uint64 address)
   {
-    return (target_nr << 8) | (address & 0xFF);
+    return (target_nr << 10) | (address & 0x3FF);
   }
 };
 
