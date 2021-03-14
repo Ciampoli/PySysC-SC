@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.3)
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake ${CMAKE_CURRENT_SOURCE_DIR}/sc-components/cmake)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake ${CMAKE_CURRENT_SOURCE_DIR}/scc/cmake)
 
 project(pysysc-sc)
 
@@ -10,8 +10,7 @@ set(ENABLE_SHARED TRUE CACHE BOOL "Build shared libraries")
 include(GNUInstallDirs)
 include(Conan)
 include(BuildType)
-
-#enable_testing() 
+include(clang-format)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -58,9 +57,7 @@ if(CCI_FOUND)
     #message( FATAL_ERROR "SystemC CCI library not found." )
 endif()
 
-include(sc-components/cmake/clang-format.cmake)
-
-add_subdirectory(sc-components)
+add_subdirectory(scc)
 add_subdirectory(components)
 add_subdirectory(top)
 
