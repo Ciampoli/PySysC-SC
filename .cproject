@@ -110,7 +110,6 @@
 		</configuration>
 		<configuration configurationName="Release"/>
 	</storageModule>
-	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.base.1318364290;cdt.managedbuild.toolchain.gnu.base.1318364290.1772265551;cdt.managedbuild.tool.gnu.c.compiler.base.1556398415;cdt.managedbuild.tool.gnu.c.compiler.input.1270594028">
@@ -121,4 +120,16 @@
 		</scannerConfigBuildInfo>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
+	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
+		<buildTargets>
+			<target name="components" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+				<buildCommand>CMAKE_BUILD_TOOL</buildCommand>
+				<buildArguments/>
+				<buildTarget>components</buildTarget>
+				<stopOnError>true</stopOnError>
+				<useDefaultCommand>true</useDefaultCommand>
+				<runAllBuilders>true</runAllBuilders>
+			</target>
+		</buildTargets>
+	</storageModule>
 </cproject>

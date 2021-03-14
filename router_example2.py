@@ -16,7 +16,7 @@ pysysc.read_config_from_conan(os.path.join(myDir, 'conanfile.txt'), build_type)
 pysysc.load_systemc()
 ###############################################################################
 logging.debug("Loading SC-Components lib")
-pysysc.add_include_path(os.path.join(myDir, 'sc-components/incl'))
+pysysc.add_include_path(os.path.join(myDir, 'scc/incl'))
 pysysc.add_library('scc.h', os.path.join(myDir, 'build/%s/lib/libscc.so'%build_type))
 ###############################################################################
 logging.debug("Loading Components lib")
