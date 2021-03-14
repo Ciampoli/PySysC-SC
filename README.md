@@ -14,7 +14,7 @@ cd PySysC-SC
 mkdir build
 cd build
 conan install .. --build=missing
-cmake ..
+cmake -DBUILD_SHARED_LIBS=ON ..
 cmake --build .
 ```
 
@@ -24,5 +24,9 @@ If you encounter issues when linking wrt. c++11 symbols you might have run into 
 ```
 compiler.libcxx=libstdc++11
 ```
-in $HOME/.conan/profiles/default
+in $HOME/.conan/profiles/default or run
+
+```
+conan profile update settings.compiler.libcxx=libstdc++11 default
+```
 
