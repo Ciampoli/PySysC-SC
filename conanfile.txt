@@ -1,11 +1,9 @@
 [requires]
-fmt/5.2.1@bincrafters/stable 
 SystemC/2.3.3@minres/stable
 
 [generators]
 cmake
 
 [options]
-fmt:header_only=True
 SystemC:stdcxx=11
 SystemC:shared=True
