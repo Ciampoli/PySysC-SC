@@ -24,7 +24,6 @@ pysysc.add_library('components.h', os.path.join(myDir, 'build/%s/lib/libcomponen
 ###############################################################################
 cpp.scc.init_logging(cpp.scc.log.INFO, 24, False);
 cpp.sc_core.sc_report_handler.set_actions(cpp.sc_core.SC_ID_MORE_THAN_ONE_SIGNAL_DRIVER_, cpp.sc_core.SC_DO_NOTHING);
-cpp.scc.init_cci("GlobalBroker")
 ###############################################################################
 # instantiate
 ###############################################################################

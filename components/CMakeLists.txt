@@ -1,6 +1,5 @@
 set(LIB_SOURCES
 	initiator.cpp
-	logging.cpp
 	target.cpp
 	clkgen.cpp
 	resetgen.cpp

@@ -55,7 +55,7 @@ void Initiator::thread_process() {
                     wait( dmi_data.get_write_latency() );
                 }
 
-                SCCINFO() << "DMI   = { " << (cmd ? 'W' : 'R') << ", " << hex << i
+                SCCDEBUG() << "DMI   = { " << (cmd ? 'W' : 'R') << ", " << hex << i
                         << " } , data = " << hex << data << " at time " << sc_time_stamp();
             }
             else
@@ -101,7 +101,7 @@ void Initiator::thread_process() {
                     dmi_ptr_valid = socket->get_direct_mem_ptr( *trans, dmi_data );
                 }
 
-                SCCINFO() << "trans = { " << (cmd ? 'W' : 'R') << ", " << hex << i
+                SCCDEBUG() << "trans = { " << (cmd ? 'W' : 'R') << ", " << hex << i
                         << " } , data = " << hex << data << " at time " << sc_time_stamp();
             }
         }
@@ -119,7 +119,7 @@ void Initiator::thread_process() {
 
         for (unsigned int i = 0; i < n_bytes; i += 4)
         {
-            SCCINFO() << "mem[" << (A + i) << "] = "
+            SCCTRACE() << "mem[" << (A + i) << "] = "
                     << *(reinterpret_cast<unsigned int*>( &data[i] ));
         }
 
@@ -131,7 +131,7 @@ void Initiator::thread_process() {
 
         for (unsigned int i = 0; i < n_bytes; i += 4)
         {
-            SCCINFO() << "mem[" << (A + i) << "] = "
+            SCCTRACE() << "mem[" << (A + i) << "] = "
                     << *(reinterpret_cast<unsigned int*>( &data[i] ));
         }
     }
