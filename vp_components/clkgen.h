@@ -5,8 +5,8 @@
  *      Author: eyck
  */
 
-#ifndef COMPONENTS_CLKGEN_H_
-#define COMPONENTS_CLKGEN_H_
+#ifndef VP_COMPONENTS_CLKGEN_H_
+#define VP_COMPONENTS_CLKGEN_H_
 
 #include <systemc>
 
@@ -20,4 +20,4 @@ protected:
     void end_of_elaboration() override;
 };
 
-#endif /* COMPONENTS_CLKGEN_H_ */
+#endif /* VP_COMPONENTS_CLKGEN_H_ */

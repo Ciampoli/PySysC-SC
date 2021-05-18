@@ -5,8 +5,8 @@
  *      Author: eyck
  */
 
-#ifndef COMPONENTS_RESETGEN_H_
-#define COMPONENTS_RESETGEN_H_
+#ifndef VP_COMPONENTS_RESETGEN_H_
+#define VP_COMPONENTS_RESETGEN_H_
 
 #include <systemc>
 
@@ -23,4 +23,4 @@ protected:
     void thread();
 };
 
-#endif /* COMPONENTS_RESETGEN_H_ */
+#endif /* VP_COMPONENTS_RESETGEN_H_ */

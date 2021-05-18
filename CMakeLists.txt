@@ -8,7 +8,6 @@ set(ENABLE_SHARED TRUE CACHE BOOL "Build shared libraries")
 
 
 include(GNUInstallDirs)
-include(Conan)
 include(BuildType)
 include(clang-format)
 
@@ -35,8 +34,6 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     set(warnings "/W4 /WX /EHsc")
 endif()
 
-setup_conan()
-
 # This line finds the boost lib and headers. 
 set(Boost_NO_BOOST_CMAKE ON) #  Don't do a find_package in config mode before searching for a regular boost install.
 find_package(Boost COMPONENTS program_options system thread REQUIRED)
@@ -58,7 +55,7 @@ if(CCI_FOUND)
 endif()
 
 add_subdirectory(scc)
-add_subdirectory(components)
+add_subdirectory(vp_components)
 add_subdirectory(top)
 
 # CTest is a testing tool that can be used to test your project.

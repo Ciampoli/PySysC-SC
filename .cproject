@@ -51,7 +51,9 @@
 				</win32>
 				<defs>
 					<def name="BUILD_SHARED_LIBS" type="BOOL" val="ON"/>
+					<def name="CMAKE_BUILD_TYPE" type="STRING" val="${config_name}"/>
 				</defs>
+				<undefs/>
 			</storageModule>
 		</cconfiguration>
 		<cconfiguration id="cdt.managedbuild.toolchain.gnu.base.1318364290.125067248">

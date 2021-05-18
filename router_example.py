@@ -9,16 +9,17 @@ build_type='Debug'
 logging.basicConfig(level=logging.DEBUG)
 ###############################################################################
 myDir = os.path.dirname( os.path.realpath(__file__))
-res=pysysc.read_config_from_conan(os.path.join(myDir, 'conanfile.txt'), build_type)
 pysysc.load_systemc()
 ###############################################################################
 logging.debug("Loading SC-Components lib")
-pysysc.add_include_path(os.path.join(myDir, 'scc/incl'))
-pysysc.add_library('scc.h', os.path.join(myDir, 'build/%s/lib/libscc.so'%build_type))
+pysysc.add_include_path(os.path.join(myDir, 'scc/src/sysc'))
+pysysc.add_include_path(os.path.join(myDir, 'scc/src/common'))
+pysysc.add_include_path(os.path.join(myDir, 'scc/third_party'))
+pysysc.add_library('scc_sysc.h', os.path.join(myDir, 'build/%s/scc/src/sysc/libscc-sysc.so'%build_type))
 ###############################################################################
 logging.debug("Loading Components lib")
-pysysc.add_include_path(os.path.join(myDir, 'components'))
-pysysc.add_library('components.h', os.path.join(myDir, 'build/%s/lib/libcomponents.so'%build_type))
+pysysc.add_include_path(os.path.join(myDir, 'vp_components'))
+pysysc.add_library('components.h', os.path.join(myDir, 'build/%s/vp_components/libvp_components.so'%build_type))
 ###############################################################################
 # configure
 ###############################################################################
