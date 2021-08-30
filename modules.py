@@ -18,26 +18,36 @@ logging.basicConfig(level=logging.DEBUG)
 build_type='Debug'
 ###############################################################################
 myDir = os.path.dirname( os.path.realpath(__file__))
-pysysc.read_config_from_conan(os.path.join(myDir, 'conanfile.txt'), build_type)
+pysysc.read_config_from_conan(os.path.join(myDir, 'build/%s/conanfile.txt'%build_type), build_type)
 pysysc.load_systemc()
 ###############################################################################
 logging.debug("Loading SC-Components lib")
-pysysc.add_include_path(os.path.join(myDir, 'scc/incl'))
-pysysc.add_library('scc.h', os.path.join(myDir, 'build/%s/lib/libscc.so'%build_type))
+# pysysc.add_include_path(os.path.join(myDir, 'scc/incl'))
+# pysysc.add_library('scc.h', os.path.join(myDir, 'build/%s/lib/libscc.so'%build_type))
+pysysc.add_include_path(os.path.join(myDir, 'scc/src/common'))
+pysysc.add_library('scc_util.h', os.path.join(myDir, 'build/%s/scc/src/common/libscc-util.so'%build_type))
+pysysc.add_include_path(os.path.join(myDir, 'scc/third_party'))
+pysysc.add_include_path(os.path.join(myDir, 'scc/third_party/scv-tr/src'))
+pysysc.add_library('scv-tr.h', os.path.join(myDir, 'build/%s/scc/third_party/scv-tr/src/libscv-tr.so'%build_type))
+pysysc.add_include_path(os.path.join(myDir, 'scc/src/sysc'))
+pysysc.add_library('scc_sysc.h', os.path.join(myDir, 'build/%s/scc/src/sysc/libscc-sysc.so'%build_type))
+pysysc.add_include_path(os.path.join(myDir, 'scc/src/components'))
+cppyy.include('scc_components.h')
 ###############################################################################
 logging.debug("Loading Components lib")
-pysysc.add_include_path(os.path.join(myDir, 'components'))
-pysysc.add_library('components.h', os.path.join(myDir, 'build/%s/lib/libcomponents.so'%build_type))
+pysysc.add_include_path(os.path.join(myDir, 'vp_components'))
+pysysc.add_library('components.h', os.path.join(myDir, 'build/%s/vp_components/libvp_components.so'%build_type))
 
 ###############################################################################
 # define toplevel class
 ###############################################################################
 num_of_mem = 4
 
-class TopModule(cpp.scc.PyScModule):
+from pysysc.sysc import ScModule
+class TopModule(ScModule):
     
     def __init__(self, name):
-        super().__init__(self, name)
+        ScModule.__init__(self, name)
         ###############################################################################
         # instantiate
         ###############################################################################
@@ -55,6 +65,7 @@ class TopModule(cpp.scc.PyScModule):
         [self.rst.sink(m.reset_i) for m in self.memories]
         Connection().src(self.initiator.socket).sink(self.router.target_socket)
         [Connection().src(self.router.initiator_socket.at(idx)).sink(m.socket) for idx,m in enumerate(self.memories)]
+        self.ScThread("RunThread")
         
     def EndOfElaboration(self):
         print("Elaboration finished")
@@ -65,6 +76,12 @@ class TopModule(cpp.scc.PyScModule):
     def EndOfSimulation(self):
         print("Simulation finished")
 
+    def RunThread(self):
+        print("Starting RunThread")
+        while(cpp.sc_core.sc_time_stamp()<cpp.sc_core.sc_time(500, cpp.sc_core.SC_NS)):
+            #self.pyScWait(self.clk.signal.value_changed_event())
+            self.ScWait(cpp.sc_core.sc_time(100, cpp.sc_core.SC_NS))
+            print("Hello from Thread %s, @ %s"%(self.name(), cpp.sc_core.sc_time_stamp().to_string()))
 ###############################################################################
 # configure
 ###############################################################################
