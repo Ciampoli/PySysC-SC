@@ -9,7 +9,6 @@ include(GNUInstallDirs)
 include(BuildType)
 include(clang-format)
 
-set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
@@ -34,7 +33,7 @@ endif()
 
 include(ConanInline)
 conan_check()
-set(CONAN_BOOST_OPTIONS
+set(BOOST_OPTIONS
 boost:fPIC=True
 boost:shared=True
 boost:header_only=False 
@@ -61,44 +60,27 @@ boost:without_timer=True
 boost:without_type_erasure=True
 boost:without_wave=True
 )
-set(CONAN_PACKAGES boost/1.75.0)
-set(CONAN_SETTINGS ${CONAN_BOOST_OPTIONS})
-if(NOT DEFINED ENV{SYSTEMC_HOME})
-    set(CONAN_PACKAGES ${CONAN_PACKAGES}
-        systemc/2.3.3
-        systemc-cci/1.0.0
-        )
-    set(CONAN_SETTINGS ${CONAN_SETTINGS}  
-        #systemc:phase_cb=False
-        systemc-cci:shared=False
-        )
+set(CONAN_PACKAGE_LIST fmt/8.0.1 spdlog/1.9.2 zlib/1.2.11 boost/1.75.0 yaml-cpp/0.7.0 jsoncpp/1.9.5 lz4/1.9.3)
+set(CONAN_PACKAGE_OPTIONS fmt:header_only=True spdlog:header_only=True ${BOOST_OPTIONS})
+if(NOT USE_CWR_SYSTEMC AND NOT USE_NCSC_SYSTEMC AND NOT DEFINED ENV{SYSTEMC_HOME})
+    set(CONAN_PACKAGE_LIST ${CONAN_PACKAGE_LIST} systemc/2.3.3 systemc-cci/1.0.0)
+    set(CONAN_PACKAGE_OPTIONS ${CONAN_PACKAGE_OPTIONS} systemc-cci:shared=False)
 endif()
-conan_configure(REQUIRES ${CONAN_PACKAGES}
+conan_configure(REQUIRES ${CONAN_PACKAGE_LIST}
                 GENERATORS cmake_find_package
-                OPTIONS ${CONAN_SETTINGS}
+                OPTIONS ${CONAN_PACKAGE_OPTIONS}
                 )
 conan_install()
-conan_setup(TARGETS)
-
+set(CONAN_CMAKE_SILENT_OUTPUT ON)
 # This line finds the boost lib and headers. 
 set(Boost_NO_BOOST_CMAKE ON) #  Don't do a find_package in config mode before searching for a regular boost install.
 find_package(Boost COMPONENTS program_options system thread REQUIRED)
 
-# set-up SystemC and SCV
 include(SystemCPackage)
-if(SystemC_FOUND)
-    include_directories(${SystemC_INCLUDE_DIRS})
-    link_directories(${SystemC_LIBRARY_DIRS})
-else()
-    message( FATAL_ERROR "SystemC library not found." )
-endif()
-
-if(CCI_FOUND)
-    include_directories(${CCI_INCLUDE_DIRS})
-    link_directories(${CCI_LIBRARY_DIRS})
-#else()
-    #message( FATAL_ERROR "SystemC CCI library not found." )
-endif()
+find_package(spdlog REQUIRED)
+find_package(fmt REQUIRED)
+find_package(yaml-cpp REQUIRED)
+find_package(lz4 REQUIRED)
 
 add_subdirectory(scc)
 add_subdirectory(vp_components)
