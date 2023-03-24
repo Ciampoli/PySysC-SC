@@ -3,30 +3,31 @@ import logging
 from cppyy import gbl as cpp
 import pysysc
 import pysysc.structural as struct
+import pysysc.scc as scc
 from pysysc.structural import Connection, Module, Signal, Simulation
 
 ###############################################################################
 # setup  and load
 ###############################################################################
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 build_type='Debug'
 ###############################################################################
 myDir = os.path.dirname( os.path.realpath(__file__))
 pysysc.load_systemc()
 ###############################################################################
 logging.debug("Loading SC-Components lib")
-pysysc.add_include_path(os.path.join(myDir, 'scc/src/sysc'))
-pysysc.add_include_path(os.path.join(myDir, 'scc/src/common'))
-pysysc.add_include_path(os.path.join(myDir, 'scc/third_party'))
-pysysc.add_library('scc_sysc.h', os.path.join(myDir, 'build/%s/scc/src/sysc/libscc-sysc.so'%build_type))
+#pysysc.add_include_path(os.path.join(myDir, '../install/include'))
+#pysysc.add_library('scc_util.h', os.path.join(myDir, '../install/lib64/libscc-util.so'))
+#pysysc.add_library('scc_sysc.h', os.path.join(myDir, '../install/lib64/libscc-sysc.so'))
+scc.load_lib(os.path.join(myDir, '../install'))
 ###############################################################################
 logging.debug("Loading Components lib")
 pysysc.add_include_path(os.path.join(myDir, 'vp_components'))
-pysysc.add_library('components.h', os.path.join(myDir, 'build/%s/vp_components/libvp_components.so'%build_type))
+pysysc.add_library('components.h', os.path.join(myDir, 'build/vp_components/libvp_components.so'))
 ###############################################################################
 # configure
 ###############################################################################
-Simulation.setup(logging.root.level)
+scc.setup(logging.root.level)
 ###############################################################################
 # instantiate
 ###############################################################################
@@ -51,6 +52,6 @@ struct.dump_structure()
 simcontext = cpp.sc_core.sc_get_curr_simcontext()
 objects = cpp.sc_core.sc_get_top_level_objects(simcontext)
 if __name__ == "__main__":
-    Simulation.configure(enable_vcd=True)
+    scc.configure(enable_trace=True)
     Simulation.run()
     logging.debug("Done")
