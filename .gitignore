@@ -3,3 +3,6 @@
 /*.vcd
 /*.png
 /*.dot
+/*.fst
+/*.ftr
+/.venv

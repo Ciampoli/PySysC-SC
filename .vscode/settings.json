@@ -1,0 +1,14 @@
+{
+        "editor.rulers": [
+                {
+                        "column": 140,
+                        "comment": "clang-format"
+                }
+        ],
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
+        "cmake.buildDirectory": "${workspaceFolder}/build",
+        "[jsonc]": {
+                "editor.defaultFormatter": "vscode.json-language-features"
+        }
+}

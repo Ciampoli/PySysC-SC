@@ -12,6 +12,7 @@ include(clang-format)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+set(CMAKE_CXX_STANDARD 17)
 
 include(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG("-march=native" COMPILER_SUPPORTS_MARCH_NATIVE)
@@ -63,8 +64,8 @@ boost:without_wave=True
 set(CONAN_PACKAGE_LIST fmt/8.0.1 spdlog/1.9.2 zlib/1.2.11 boost/1.75.0 yaml-cpp/0.7.0 jsoncpp/1.9.5 lz4/1.9.3)
 set(CONAN_PACKAGE_OPTIONS fmt:header_only=True spdlog:header_only=True ${BOOST_OPTIONS})
 if(NOT USE_CWR_SYSTEMC AND NOT USE_NCSC_SYSTEMC AND NOT DEFINED ENV{SYSTEMC_HOME})
-    set(CONAN_PACKAGE_LIST ${CONAN_PACKAGE_LIST} systemc/2.3.3 systemc-cci/1.0.0)
-    set(CONAN_PACKAGE_OPTIONS ${CONAN_PACKAGE_OPTIONS} systemc-cci:shared=False)
+    set(CONAN_PACKAGE_LIST ${CONAN_PACKAGE_LIST} systemc/2.3.4)
+    set(CONAN_PACKAGE_OPTIONS ${CONAN_PACKAGE_OPTIONS} systemc:shared=True)
 endif()
 conan_configure(REQUIRES ${CONAN_PACKAGE_LIST}
                 GENERATORS cmake_find_package
@@ -84,7 +85,7 @@ find_package(lz4 REQUIRED)
 
 add_subdirectory(scc)
 add_subdirectory(vp_components)
-add_subdirectory(top)
+#add_subdirectory(top)
 
 # CTest is a testing tool that can be used to test your project.
 # enable_testing()
