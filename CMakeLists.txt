@@ -61,8 +61,10 @@ boost:without_timer=True
 boost:without_type_erasure=True
 boost:without_wave=True
 )
-set(CONAN_PACKAGE_LIST fmt/8.0.1 spdlog/1.9.2 zlib/1.2.11 boost/1.75.0 yaml-cpp/0.7.0 jsoncpp/1.9.5 lz4/1.9.3)
-set(CONAN_PACKAGE_OPTIONS fmt:header_only=True spdlog:header_only=True ${BOOST_OPTIONS})
+# AIAX compatibility mode: boost is 1.82.0
+set(CONAN_PACKAGE_LIST fmt/8.0.1 spdlog/1.11.0 zlib/1.2.11 boost/1.82.0 yaml-cpp/0.7.0 jsoncpp/1.9.5 lz4/1.9.3)
+# AIAX compatibility mode: FMT is external
+set(CONAN_PACKAGE_OPTIONS ${BOOST_OPTIONS})
 if(NOT USE_CWR_SYSTEMC AND NOT USE_NCSC_SYSTEMC AND NOT DEFINED ENV{SYSTEMC_HOME})
     set(CONAN_PACKAGE_LIST ${CONAN_PACKAGE_LIST} systemc/2.3.4)
     set(CONAN_PACKAGE_OPTIONS ${CONAN_PACKAGE_OPTIONS} systemc:shared=True)
@@ -82,9 +84,12 @@ find_package(spdlog REQUIRED)
 find_package(fmt REQUIRED)
 find_package(yaml-cpp REQUIRED)
 find_package(lz4 REQUIRED)
+# AIAX compatibility mode: FMT is external
+add_compile_definitions(SPDLOG_FMT_EXTERNAL)
 
 add_subdirectory(scc)
 add_subdirectory(vp_components)
+
 #add_subdirectory(top)
 
 # CTest is a testing tool that can be used to test your project.
