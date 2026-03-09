@@ -11,3 +11,6 @@ set(LIBRARY_NAME vp_components)
 add_library(${LIBRARY_NAME} SHARED ${LIB_SOURCES})
 target_link_libraries (${LIBRARY_NAME} LINK_PUBLIC scc)
 target_include_directories (${LIBRARY_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+get_target_property(OUT ${LIBRARY_NAME} LINK_LIBRARIES)
+message(STATUS "The libraries linked to ${LIBRARY_NAME} are: ${OUT}")
