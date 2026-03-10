@@ -5,7 +5,7 @@
 #
 
 import logging
-import os.path
+import os
 
 import pysysc
 import pysysc.scc as scc
@@ -18,10 +18,23 @@ from pysysc.structural import Connection, Module, Signal, Simulation
 logging.basicConfig(level=logging.DEBUG)
 ###############################################################################
 myDir = os.path.dirname(os.path.realpath(__file__))
-pysysc.load_systemc(17)
+logging.debug("Setting vars to package homes...")
+vars = ['SPDLOG_HOME', 'FMT_HOME', 'BOOST_ROOT']
+for name in vars:
+    if (name in list(os.environ.keys())):
+        pysysc.add_include_path(os.path.join(os.environ[name], 'include'))
+    else:
+        print('WARNING : ', name, ' env variable not set')
+###############################################################################
+logging.debug("Loading SystemC...")
+if (not pysysc.load_systemc(17)):
+    print('Error : failed to load systemc dynamic library')
+    exit()
 ###############################################################################
 logging.debug("Loading SC-Components lib")
-scc.load_lib(myDir)
+logging.debug("Working in %s", myDir)
+libDir = os.path.join(myDir, "build_" + os.environ['OSNICKNAME'])
+scc.load_lib(myDir, libDir)
 ###############################################################################
 logging.debug("Loading Components lib")
 pysysc.add_include_path(os.path.join(myDir, "vp_components"))

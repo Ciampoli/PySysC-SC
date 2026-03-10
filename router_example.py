@@ -1,7 +1,8 @@
 import logging
-import os.path
+import os
 
 import pysysc
+#NB uses scc copy in contrib/pysysc/src/pysysc/scc
 from cppyy import gbl as cpp
 
 ###############################################################################
@@ -10,19 +11,40 @@ from cppyy import gbl as cpp
 logging.basicConfig(level=logging.DEBUG)
 ###############################################################################
 myDir = os.path.dirname(os.path.realpath(__file__))
-pysysc.load_systemc(17)
+logging.debug("Setting vars to package homes...")
+vars = ['SPDLOG_HOME', 'FMT_HOME', 'BOOST_ROOT']
+for name in vars:
+    if (name in list(os.environ.keys())):
+        pysysc.add_include_path(os.path.join(os.environ[name], 'include'))
+    else:
+        print('WARNING : ', name, ' env variable not set')
+###############################################################################
+logging.debug("Loading SystemC...")
+if (not pysysc.load_systemc(17)):
+    print('Error : failed to load systemc dynamic library')
+    exit()
 ###############################################################################
 logging.debug("Loading SC-Components lib")
-pysysc.add_include_path(os.path.join(myDir, "scc/third_party/cci-1.0.0"))
+logging.debug("Working in %s", myDir)
+#TODO:
+# must introduce an env variable to PYSYSC
+libDir = os.path.join(myDir, "build_" + os.environ['OSNICKNAME'])
+#TODO:
+# Must relate these paths with version effectively installed !
+# e.g. I have cci-1.0.1 and path does not exist...
+pysysc.add_include_path(os.path.join(myDir, "scc/third_party/cci-1.0.1"))
 pysysc.add_include_path(os.path.join(myDir, "scc/third_party/scv-tr/src"))
 pysysc.add_include_path(os.path.join(myDir, "scc/src/sysc"))
 pysysc.add_include_path(os.path.join(myDir, "scc/src/common"))
 pysysc.add_include_path(os.path.join(myDir, "scc/third_party"))
-pysysc.add_library("scc_sysc.h", "libscc-sysc.so", myDir)
+pysysc.add_library("scc_sysc.h", "libscc-sysc.so", libDir)
 ###############################################################################
 logging.debug("Loading Components lib")
 pysysc.add_include_path(os.path.join(myDir, "vp_components"))
-pysysc.add_library("components.h", "libvp_components.so", myDir)
+pysysc.add_library("components.h", "libvp_components.so", libDir)
+# might be useful to dump current list of include dirs:
+#for inc in sorted(pysysc.includeDirs):
+#    print(inc)
 ###############################################################################
 # configure
 ###############################################################################

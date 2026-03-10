@@ -1,7 +1,8 @@
 import logging
-import os.path
+import os
 
 import pysysc
+#NB uses scc as installed by pip
 import pysysc.scc as scc
 import pysysc.structural as struct
 from cppyy import gbl as cpp
@@ -13,14 +14,27 @@ from pysysc.structural import Connection, Module, Signal, Simulation
 logging.basicConfig(level=logging.DEBUG)
 ###############################################################################
 myDir = os.path.dirname(os.path.realpath(__file__))
-pysysc.load_systemc(17)
+logging.debug("Setting vars to package homes...")
+vars = ['SPDLOG_HOME', 'FMT_HOME', 'BOOST_ROOT']
+for name in vars:
+    if (name in list(os.environ.keys())):
+        pysysc.add_include_path(os.path.join(os.environ[name], 'include'))
+    else:
+        print('WARNING : ', name, ' env variable not set')
+###############################################################################
+logging.debug("Loading SystemC...")
+if (not pysysc.load_systemc(17)):
+    print('Error : failed to load systemc dynamic library')
+    exit()
 ###############################################################################
 logging.debug("Loading SC-Components lib")
-scc.load_lib(myDir)
+logging.debug("Working in %s", myDir)
+libDir = os.path.join(myDir, "build_" + os.environ['OSNICKNAME'])
+scc.load_lib(myDir, libDir)
 ###############################################################################
 logging.debug("Loading Components lib")
 pysysc.add_include_path(os.path.join(myDir, "vp_components"))
-pysysc.add_library("components.h", "libvp_components.so", myDir)
+pysysc.add_library("components.h", "libvp_components.so", libDir)
 ###############################################################################
 # configure
 ###############################################################################
@@ -34,6 +48,16 @@ rst_gen = Module(cpp.ResetGen).create("rst_gen")
 initiator = Module(cpp.Initiator).create("initiator")
 memories = [Module(cpp.Memory).create("mem%d" % i) for i in range(2)]
 router = Module(cpp.Router[len(memories)]).create("router")
+
+# Might be useful to dump the module names
+#logging.debug("Get modules name:")
+#print(clk_gen.name())
+#print(rst_gen.name())
+#print(initiator.name())
+#for mem in memories:
+#    print(mem.name());
+#print(router.name())
+
 ###############################################################################
 # connect it
 ###############################################################################
